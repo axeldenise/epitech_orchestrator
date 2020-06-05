@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  namespace: default
+  name: result-ingress
+  annotations:
+    traefik.frontend.rule.type: PathPrefixStrip
+spec:
+  rules:
+  - host: result.dop.io
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: result
+          servicePort: 80

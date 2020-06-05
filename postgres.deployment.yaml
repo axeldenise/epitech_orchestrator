@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: default
+  labels:
+    bdd: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      bdd: postgres
+  template:
+    metadata:
+      labels:
+        bdd: postgres
+    spec:
+      restartPolicy: Always
+      containers:
+      - name: postgres
+        image: postgres:12
+        envFrom:
+          - configMapRef:
+              name: postgres-configmap
+          - secretRef:
+              name: postgres-secret
+        ports:
+          - containerPort: 5432
+        volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgredb
+      volumes:
+        - name: postgredb
+          persistentVolumeClaim:
+            claimName: postgres-pv-claim

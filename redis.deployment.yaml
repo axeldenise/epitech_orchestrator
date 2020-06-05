@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: default
+  labels:
+    bdd: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      bdd: redis
+  template:
+    metadata:
+      labels:
+        bdd: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:5.0
+        command:
+          - redis-server
+        ports:
+        - containerPort: 6379
+      restartPolicy: Always
